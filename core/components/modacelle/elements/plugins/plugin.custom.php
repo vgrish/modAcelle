@@ -36,13 +36,12 @@ switch ($modx->event->name) {
                 continue;
             }
             $listName = $product->get('pagetitle');
-
-
+            
             $q = $modx->newQuery('modTemplateVar');
             $q->leftJoin('modTemplateVarResource', 'modTemplateVarResource',
                 'modTemplateVarResource.tmplvarid = modTemplateVar.id');
             $q->where(array(
-                'modTemplateVar.name'              => "adrbook_unisender",
+                'modTemplateVar.name'              => $modacelle->getOption('tv_list_name', null, 'adrbook_unisender'),
                 'modTemplateVarResource.contentid' => $product->get('id')
             ));
             $q->select('modTemplateVarResource.value');
