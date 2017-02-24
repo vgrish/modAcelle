@@ -212,15 +212,16 @@ class modacelle
      */
     public function getAcelleUserData(modUser $user)
     {
+        $pls = $user->toArray();
+
+        if ($profile = $user->getOne('Profile')) {
+            $pls = array_merge($pls, $profile->toArray());
+        }
+
         $data = array(
             'FIRST_NAME' => $user->get('username')
         );
 
-        if (!$profile = $user->getOne('Profile')) {
-            return $data;
-        }
-
-        $pls = array_merge($user->toArray(), $profile->toArray());
         foreach ($pls as $k => $v) {
             $data[strtoupper($k)] = $v;
         }
@@ -589,19 +590,19 @@ class modacelle
         switch ($method) {
             case 'POST':
                 curl_setopt($ch, CURLOPT_POST, count($data));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
                 break;
             case 'PUT':
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
                 break;
             case 'PATCH':
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
                 break;
             case 'DELETE':
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
                 break;
             default:
                 if (!empty($data)) {
