@@ -1,5 +1,9 @@
 Changelog for modAcelle
 
+1.0.1-beta (24.02.2017)
+==============
+- Fix "api_token" in request
+
 1.0.0-beta
 ==============
 - Initial

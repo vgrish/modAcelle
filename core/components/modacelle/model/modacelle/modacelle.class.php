@@ -577,8 +577,8 @@ class modacelle
         if (empty($url)) {
             $url = $this->getApiUrl($mode);
         }
-
-        $data['api_token'] = $this->getApiToken();
+        
+        $data = array_merge(array('api_token' => $this->getApiToken()), $data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
