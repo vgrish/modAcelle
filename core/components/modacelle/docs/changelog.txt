@@ -1,5 +1,9 @@
 Changelog for modAcelle
 
+1.0.3-beta (25.02.2017)
+==============
+- Fix "custom" plugin
+
 1.0.2-beta (24.02.2017)
 ==============
 - Fix "http_build_query" in request

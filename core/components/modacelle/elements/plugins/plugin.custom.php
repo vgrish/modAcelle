@@ -36,7 +36,7 @@ switch ($modx->event->name) {
                 continue;
             }
             $listName = $product->get('pagetitle');
-            
+
             $q = $modx->newQuery('modTemplateVar');
             $q->leftJoin('modTemplateVarResource', 'modTemplateVarResource',
                 'modTemplateVarResource.tmplvarid = modTemplateVar.id');
@@ -63,10 +63,11 @@ switch ($modx->event->name) {
             }
 
             $data = array();
+            $orderCost = $order->get('cost');
             $email = $modx->getOption('EMAIL', $userPls);
 
             switch (true) {
-                case $status == 1 AND empty($order->get('cost')):
+                case $status == 1 AND empty($orderCost):
                 case $status == 2:
 
                     $userUid = $modacelle->getAcelleSubscriberUidByEmail($email, $listUid);
