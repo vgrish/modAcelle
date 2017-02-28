@@ -1,5 +1,9 @@
 Changelog for modAcelle
 
+1.0.4-beta (28.02.2017)
+==============
+- Add "extended, geolocation" fields
+
 1.0.3-beta (25.02.2017)
 ==============
 - Fix "custom" plugin

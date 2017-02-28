@@ -18,6 +18,8 @@ class modacelle
     /** @var array $initialized */
     public $initialized = array();
 
+    /** @var gl $gl */
+    public $gl;
 
     /**
      * @param modX  $modx
@@ -55,6 +57,21 @@ class modacelle
         $this->modx->addPackage('modacelle', $this->getOption('modelPath'));
         $this->modx->lexicon->load('modacelle:default');
         $this->namespace = $this->getOption('namespace', $config, 'modacelle');
+
+        $level = $modx->getLogLevel();
+        $modx->setLogLevel(xPDO::LOG_LEVEL_FATAL);
+
+        /** @var gl $gl */
+        if ($this->gl = $modx->getService('gl', 'gl',
+            $modx->getOption('gl_core_path', null, $modx->getOption('core_path') . 'components/gl/') . 'model/gl/')
+        ) {
+            if (!($this->gl instanceof gl)) {
+                $this->gl = false;
+            }
+        }
+
+        $modx->setLogLevel($level);
+
     }
 
     /**
@@ -154,12 +171,12 @@ class modacelle
      *
      * @return array
      */
-    public function flattenArray(array $array = array(), $prefix = '')
+    public function flattenArray(array $array = array(), $prefix = '', $separator = '_')
     {
         $outArray = array();
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $outArray = $outArray + $this->flattenArray($value, $prefix . $key . '.');
+                $outArray = $outArray + $this->flattenArray($value, $prefix . $key . $separator);
             } else {
                 $outArray[$prefix . $key] = $value;
             }
@@ -212,18 +229,42 @@ class modacelle
      */
     public function getAcelleUserData(modUser $user)
     {
-        $pls = $user->toArray();
-
-        if ($profile = $user->getOne('Profile')) {
-            $pls = array_merge($pls, $profile->toArray());
-        }
-
         $data = array(
             'FIRST_NAME' => $user->get('username')
         );
 
+        $pls = $user->toArray();
+        if ($profile = $user->getOne('Profile')) {
+            $data['EMAIL'] = $profile->get('email');
+            $pls = array_merge($pls, $profile->toArray());
+        }
+
         foreach ($pls as $k => $v) {
-            $data[strtoupper($k)] = $v;
+            if (!is_array($v)) {
+                $data[$k] = $v;
+            } else {
+                $data = array_merge($data, $this->flattenArray(array($k => $v)));
+            }
+        }
+
+        /* process gl opts */
+        $glOpts = $this->getGlOpts();
+        if (!empty($glOpts)) {
+            $data = array_merge($data, $this->flattenArray(array('gl' => $glOpts)));
+        }
+
+        $this->log($data);
+
+        return $data;
+    }
+
+    public function getGlOpts()
+    {
+        $data = array();
+
+        if ($this->gl) {
+            $this->gl->initialize($this->modx->context->key);
+            $data = (array)$this->gl->opts;
         }
 
         return $data;
@@ -394,7 +435,9 @@ class modacelle
         if (!$mode) {
             return $mode;
         }
-        $data = array_merge(array(), $data);
+        $data = array_merge(array(
+            'per_page' => 20
+        ), $data);
 
         return $this->request($mode, $data, 'GET');
     }
