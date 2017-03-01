@@ -4,7 +4,7 @@
 define('PKG_NAME', 'modAcelle');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
-define('PKG_VERSION', '1.0.4');
+define('PKG_VERSION', '1.0.5');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 define('PKG_NAMESPACE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
@@ -33,6 +33,7 @@ define('MODX_ASSETS_URL', MODX_BASE_URL . 'assets/');
 
 define('BUILD_SETTING_UPDATE', false);
 define('BUILD_PLUGIN_UPDATE', false);
+define('BUILD_EVENT_UPDATE', true);
 
 define('BUILD_PLUGIN_STATIC', false);
 

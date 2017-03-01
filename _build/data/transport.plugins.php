@@ -3,22 +3,26 @@
 $plugins = array();
 
 $tmp = array(
+    'modAcelleInit'         => array(
+        'file'        => 'init',
+        'description' => '',
+        'events'      => array(
+            'OnMODXInit'             => array('priority' => 150),
+            'modAcelleObjectProcess' => array('priority' => 0),
+        )
+    ),
     'modAcelleUserCreate'   => array(
         'file'        => 'user.create',
         'description' => '',
         'events'      => array(
-            'OnUserSave' => array(
-                'priority' => 150
-            ),
+            'OnUserSave' => array('priority' => 150),
         )
     ),
     'modAcelleUserPayOrder' => array(
         'file'        => 'user.pay.order',
         'description' => '',
         'events'      => array(
-            'msOnChangeOrderStatus' => array(
-                'priority' => 150
-            ),
+            'msOnChangeOrderStatus' => array('priority' => 150),
         ),
         'disabled'    => 1
     ),
@@ -26,9 +30,7 @@ $tmp = array(
         'file'        => 'custom',
         'description' => '',
         'events'      => array(
-            'msOnChangeOrderStatus' => array(
-                'priority' => 150
-            ),
+            'msOnChangeOrderStatus' => array('priority' => 150),
         ),
         'disabled'    => 1
     )

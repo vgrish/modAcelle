@@ -1,5 +1,10 @@
 Changelog for modAcelle
 
+1.0.5-beta (01.03.2017)
+==============
+- Add "modAcelleObjectProcess" event
+- Add "processEventObject"
+
 1.0.4-beta (28.02.2017)
 ==============
 - Add "extended, geolocation" fields

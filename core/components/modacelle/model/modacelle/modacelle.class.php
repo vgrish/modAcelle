@@ -222,6 +222,26 @@ class modacelle
         }
     }
 
+    public function processEventObject($type = '', $object, $class = 'modAcelleEventObject')
+    {
+        /** @var xPDOObject|modAcelleEventObject $object */
+        if (is_object($object) AND $object instanceof xPDOObject) {
+            $row = $object->toArray();
+        } else {
+            $row = (array)$object;
+        }
+
+        $object = $this->modx->newObject($class);
+        $object->fromArray($row, '', true, true);
+
+        $this->modx->invokeEvent('modAcelleObjectProcess', array(
+            'type'   => $type,
+            'object' => &$object,
+        ));
+
+        return ($object instanceof xPDOObject) ? $object->toArray() : $object;
+    }
+
     /**
      * @param modUser $user
      *
@@ -247,12 +267,20 @@ class modacelle
             }
         }
 
+        /* prepare data */
+        foreach (array('blockeduntil', 'blockedafter', 'lastlogin') as $k) {
+            if (!empty($data[$k])) {
+                $data[$k] = strftime('%Y-%m-%d', $data[$k]);
+            }
+        }
+
         /* process gl opts */
         $glOpts = $this->getGlOpts();
         if (!empty($glOpts)) {
             $data = array_merge($data, $this->flattenArray(array('gl' => $glOpts)));
         }
 
+        $data = $this->processEventObject('user_data', $data);
         $this->log($data);
 
         return $data;
