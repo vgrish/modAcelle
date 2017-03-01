@@ -4,6 +4,7 @@ Changelog for modAcelle
 ==============
 - Add "modAcelleObjectProcess" event
 - Add "processEventObject"
+- Add "process user" script
 
 1.0.4-beta (28.02.2017)
 ==============
